@@ -1,0 +1,205 @@
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*! DaisyUI Full Theme Output (Excluding Light & Dark) */
+
+/* Cupcake Theme */
+[data-theme='cupcake'] {
+    --color-base-100: #fdf1f7;
+    --color-base-content: #ff5f9e;
+    --color-primary: #ff80b5;
+    --color-secondary: #ff98c2;
+    --color-accent: #ffb3d6;
+  }
+  
+  /* Bumblebee Theme */
+  [data-theme='bumblebee'] {
+    --color-base-100: #fef9c3;
+    --color-base-content: #f59e0b;
+    --color-primary: #fbbf24;
+    --color-secondary: #facc15;
+    --color-accent: #fdd835;
+  }
+  
+  /* Emerald Theme */
+  [data-theme='emerald'] {
+    --color-base-100: #dafaf7;
+    --color-base-content: #059669;
+    --color-primary: #34d399;
+    --color-secondary: #6ee7b7;
+    --color-accent: #a7f3d0;
+  }
+  
+  /* Corporate Theme */
+  [data-theme='corporate'] {
+    --color-base-100: #eef2ff;
+    --color-base-content: #3b82f6;
+    --color-primary: #6366f1;
+    --color-secondary: #818cf8;
+    --color-accent: #a5b4fc;
+  }
+  
+  /* Synthwave Theme */
+  [data-theme='synthwave'] {
+    --color-base-100: #2d1b69;
+    --color-base-content: #e879f9;
+    --color-primary: #9333ea;
+    --color-secondary: #c084fc;
+    --color-accent: #d8b4fe;
+  }
+  
+  /* Retro Theme */
+  [data-theme='retro'] {
+    --color-base-100: #fdf6e3;
+    --color-base-content: #855b33;
+    --color-primary: #b58900;
+    --color-secondary: #cb4b16;
+    --color-accent: #dc322f;
+  }
+  
+  /* Cyberpunk Theme */
+  [data-theme='cyberpunk'] {
+    --color-base-100: #ff00ff;
+    --color-base-content: #00ffff;
+    --color-primary: #ff00ff;
+    --color-secondary: #ff7700;
+    --color-accent: #ffff00;
+  }
+  
+  /* Valentine Theme */
+  [data-theme='valentine'] {
+    --color-base-100: #ffe4e6;
+    --color-base-content: #ff477e;
+    --color-primary: #ff7592;
+    --color-secondary: #ff8fa3;
+    --color-accent: #ffb3c6;
+  }
+  
+  /* Halloween Theme */
+  [data-theme='halloween'] {
+    --color-base-100: #1a1a1a;
+    --color-base-content: #ff7518;
+    --color-primary: #ff8c00;
+    --color-secondary: #ffae42;
+    --color-accent: #ffd700;
+  }
+  
+  /* Garden Theme */
+  [data-theme='garden'] {
+    --color-base-100: #e3f2fd;
+    --color-base-content: #43a047;
+    --color-primary: #66bb6a;
+    --color-secondary: #81c784;
+    --color-accent: #a5d6a7;
+  }
+  
+  /* Forest Theme */
+  [data-theme='forest'] {
+    --color-base-100: #0d2518;
+    --color-base-content: #76c893;
+    --color-primary: #4caf50;
+    --color-secondary: #81c784;
+    --color-accent: #a5d6a7;
+  }
+  
+  /* Aqua Theme */
+  [data-theme='aqua'] {
+    --color-base-100: #e0f7fa;
+    --color-base-content: #006064;
+    --color-primary: #00acc1;
+    --color-secondary: #26c6da;
+    --color-accent: #4dd0e1;
+  }
+  
+  /* Lofi Theme */
+  [data-theme='lofi'] {
+    --color-base-100: #ffffff;
+    --color-base-content: #696969;
+    --color-primary: #737373;
+    --color-secondary: #a3a3a3;
+    --color-accent: #d6d6d6;
+  }
+  
+  /* Pastel Theme */
+  [data-theme='pastel'] {
+    --color-base-100: #f8f4ff;
+    --color-base-content: #a78bfa;
+    --color-primary: #c4b5fd;
+    --color-secondary: #d8b4fe;
+    --color-accent: #e9d5ff;
+  }
+  
+  /* Fantasy Theme */
+  [data-theme='fantasy'] {
+    --color-base-100: #ffebf0;
+    --color-base-content: #ff7eb3;
+    --color-primary: #ff99c8;
+    --color-secondary: #ffb3d9;
+    --color-accent: #ffccd9;
+  }
+  
+  /* Wireframe Theme */
+  [data-theme='wireframe'] {
+    --color-base-100: #f5f5f5;
+    --color-base-content: #969696;
+    --color-primary: #666666;
+    --color-secondary: #999999;
+    --color-accent: #bbbbbb;
+  }
+  
+  /* Black Theme */
+  [data-theme='black'] {
+    --color-base-100: #000000;
+    --color-base-content: #ffffff;
+    --color-primary: #444444;
+    --color-secondary: #666666;
+    --color-accent: #888888;
+  }
+  
+  /* Luxury Theme */
+  [data-theme='luxury'] {
+    --color-base-100: #1f2937;
+    --color-base-content: #facc15;
+    --color-primary: #d97706;
+    --color-secondary: #b45309;
+    --color-accent: #92400e;
+  }
+  
+  /* Dracula Theme */
+  [data-theme='dracula'] {
+    --color-base-100: #282a36;
+    --color-base-content: #f8f8f2;
+    --color-primary: #ff79c6;
+    --color-secondary: #bd93f9;
+    --color-accent: #ffb86c;
+  }
+  
+  /* Cmyk Theme */
+  [data-theme='cmyk'] {
+    --color-base-100: #ffffff;
+    --color-base-content: #878787;
+    --color-primary: #00a0e4;
+    --color-secondary: #ec008c;
+    --color-accent: #ffed00;
+  }
+  
+  /* Autumn Theme */
+  [data-theme='autumn'] {
+    --color-base-100: #fbf8cc;
+    --color-base-content: #c05621;
+    --color-primary: #dd6b20;
+    --color-secondary: #ea580c;
+    --color-accent: #f97316;
+  }
+  
+  /* Business Theme */
+  [data-theme='business'] {
+    --color-base-100: #1e293b;
+    --color-base-content: #facc15;
+    --color-primary: #2563eb;
+    --color-secondary: #1d4ed8;
+    --color-accent: #1e40af;
+  }
+  
