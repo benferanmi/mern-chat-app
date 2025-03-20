@@ -25,7 +25,7 @@ export const useAuthStore = create((set, get) => ({
             get().connectSocket()
 
         } catch (error) {
-            console.log("Error in checkAuth ", error);
+            // console.log("Error in checkAuth ", error);
             set({ authUser: null })
         } finally {
             set({ isCheckingAuth: false })
@@ -95,23 +95,28 @@ export const useAuthStore = create((set, get) => ({
         }
     },
 
-    connectSocket: () => {
+    connectSocket: async () => {
+        console.log("connectsocket function")
         const { authUser } = get()
-
+        console.log(authUser._id)
+        if (!authUser) console.log("not logged in")
         if (!authUser || get().socket?.connected) return;
-        const socket = io(BASE_URL, {
-            query: {
-                userId: authUser._id
-            }
-        })
-        socket.connect();
+        if (authUser) {
+            const socket = io(BASE_URL, {
+                query: {
+                    userId: authUser._id
+                }
+            })
+            socket.connect();
 
-        set({ socket: socket });
+            set({ socket: socket });
 
-        //get onlien users 
-        socket.on("getOnlineUsers", (userIds) => {
-            set({ onlineUsers: userIds })
-        })
+            //get onlien users 
+            socket.on("getOnlineUsers", (userIds) => {
+                set({ onlineUsers: userIds })
+            })
+        }
+
     },
     disconnectSocket: () => {
         if (get().socket?.connected) get().socket.disconnect()
