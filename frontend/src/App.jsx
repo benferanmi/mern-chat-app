@@ -12,20 +12,14 @@ import { useThemeStore } from './store/useThemeStore'
 
 
 const App = () => {
-  const { authUser, isCheckingAuth, checkAuth } = useAuthStore();
+  const { authUser, isCheckingAuth, checkAuth, onlineUsers } = useAuthStore();
   const { theme } = useThemeStore()
 
-  console.log(theme)
-
-  useEffect(() => {
-    document.documentElement.setAttribute("data-theme", "cupcake");
-  }, []);
 
   useEffect(() => {
     checkAuth()
-  }, [checkAuth])
+  }, [checkAuth, onlineUsers])
 
-  console.log({ authUser })
 
   if (isCheckingAuth && !authUser) {
     return (
@@ -37,7 +31,6 @@ const App = () => {
 
   return (
     <div data-theme={theme}>
-
 
       <Navbar />
 

@@ -17,8 +17,6 @@ const ProfilePage = () => {
 
     formdata.append('profilePic', profilePic)
 
-    console.log([...formdata.entries()]);
-
     await updateProfile(formdata)
   }
   return (

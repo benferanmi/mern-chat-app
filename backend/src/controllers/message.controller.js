@@ -1,4 +1,5 @@
 import cloudinary from "../lib/cloudinary.js"
+import { getReceiverSocketId, io } from "../lib/socket.js"
 import Message from "../models/message.model.js"
 import User from "../models/user.model.js"
 
@@ -6,7 +7,7 @@ const getUsersForSideBar = async (req, res) => {
 
     try {
         const loggedInUserId = req.user._id
-        const filteredUsers = await User.find({ _id: { $ne: loggedInUserId } }).select("_password")
+        const filteredUsers = await User.find({ _id: { $ne: loggedInUserId } }).select("-password")
 
         res.status(200).json(filteredUsers)
     } catch (error) {
@@ -36,14 +37,15 @@ const getMessages = async (req, res) => {
 
 const sendMessage = async (req, res) => {
     try {
-        const { text, image } = req.body
+        const text = req.body.text
+        const image = req.file
         const { id: receiverId } = req.params
         const senderId = req.user._id
 
         let imageUrl;
         if (image) {
             //Upload base64 image to cloudiary
-            const uploadResponse = await cloudinary.uploader.upload(image)
+            const uploadResponse = await cloudinary.uploader.upload(image.path, { resource_type: "image" })
             imageUrl = uploadResponse.secure_url;
         }
 
@@ -57,6 +59,11 @@ const sendMessage = async (req, res) => {
         await newMessage.save()
 
         //todo: realtime functionality goes here => socket.io
+        const receiverSocketId = getReceiverSocketId(receiverId);
+
+        if (receiverSocketId) {
+            io.to(receiverSocketId).emit("newMessage", newMessage)
+        }
 
         res.status(201).json(newMessage)
 
@@ -65,5 +72,13 @@ const sendMessage = async (req, res) => {
         res.status(500).json({ message: "Internal Server Error" })
     }
 }
+
+const deleteallMessage = async () => {
+    const ress = await Message.deleteMany({})
+    if (ress) {
+        console.log("deletedt")
+    }
+}
+
 
 export { getUsersForSideBar, getMessages, sendMessage }
