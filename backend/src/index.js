@@ -11,13 +11,16 @@ dotenv.config()
 
 const PORT = process.env.PORT
 
+const corsOptions = {
+    origin: ["https://ben-mern-chat-frontend.vercel.app", "http://localhost:5173"], 
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+    credentials: true, // Allow cookies/auth headers if needed
+  };
+
 
 app.use(express.json())
 app.use(cookieParser());
-app.use(cors({
-    origin: ["http://localhost:5173", "https://ben-mern-chat-frontend.vercel.app/"],
-        credentials: true
-}))
+app.use(cors(corsOptions))
 
 app.use("/api/auth", authRoutes)
 app.use("/api/message", messageRoutes)
