@@ -17,9 +17,10 @@ const corsOptions = {
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true,
 };
+app.use(cors({ origin: "*", credentials: true }));
 
 // **Apply CORS Middleware**
-app.use(cors(corsOptions));
+// app.use(cors(corsOptions));
 
 // **Global CORS Headers**
 app.use((req, res, next) => {
