@@ -9,6 +9,7 @@ import { useAuthStore } from './store/useAuthStore'
 import { Loader } from "lucide-react"
 import { Toaster } from "react-hot-toast"
 import { useThemeStore } from './store/useThemeStore'
+import axios from 'axios'
 
 
 const App = () => {
@@ -16,8 +17,16 @@ const App = () => {
   const { theme } = useThemeStore()
 
 
+  const textLive = async () => {
+    const res = await axios.get(import.meta.env.VITE_BASE_URL, {})
+
+    console.log(res)
+  }
+
+
   useEffect(() => {
     checkAuth()
+    textLive()
   }, [checkAuth, onlineUsers])
 
 
