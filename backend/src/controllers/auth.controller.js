@@ -10,7 +10,7 @@ const signup = async (req, res) => {
         if (!fullName || !email || !password) {
             return res.status(400).json({ messsage: "All fields are required" })
         }
-        
+
         if (password.length < 6) {
             return res.status(400).json({ messsage: "password must be at least 6 charactes" })
         }
@@ -49,6 +49,9 @@ const signup = async (req, res) => {
 
 }
 const login = async (req, res) => {
+    console.log("Received request from:", req.headers.origin);
+    console.log("Cookies received:", req.cookies);
+    console.log("Body:", req.body);
 
     const { email, password } = req.body
     console.log("Login Request Received");
