@@ -40,6 +40,7 @@ app.use((req, res, next) => {
 
 app.use(express.json())
 app.use(cookieParser());
+connectDB();
 
 app.use("/api/auth", authRoutes)
 app.use("/api/message", messageRoutes)
@@ -50,6 +51,5 @@ app.get('/', (req, res) => (
 
 server.listen(PORT, () => {
     console.log("server is running on port:" + PORT)
-    connectDB()
 })
 
