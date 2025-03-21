@@ -100,7 +100,9 @@ export const useAuthStore = create((set, get) => ({
             const socket = io(BASE_URL, {
                 query: {
                     userId: authUser._id
-                }
+                },
+                withCredentials: true,
+                transports: ["websocket", "polling"]
             })
             socket.connect();
 
@@ -116,5 +118,4 @@ export const useAuthStore = create((set, get) => ({
     disconnectSocket: () => {
         if (get().socket?.connected) get().socket.disconnect()
     },
-
 }))
