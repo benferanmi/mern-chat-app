@@ -1,16 +1,19 @@
-import express from 'express'
-import dotenv from "dotenv"
-import authRoutes from './routes/auth.route.js'
-import messageRoutes from './routes/message.route.js'
-import { connectDB } from './lib/db.js'
-import cookieParser from "cookie-parser"
-import cors from "cors"
-import { app, server } from './lib/socket.js'
+import express from 'express';
+import dotenv from "dotenv";
+import authRoutes from './routes/auth.route.js';
+import messageRoutes from './routes/message.route.js';
+import { connectDB } from './lib/db.js';
+import cookieParser from "cookie-parser";
+import cors from "cors";
+import { app, server } from './lib/socket.js';
 
-dotenv.config()
+dotenv.config();
 
-const PORT = process.env.PORT
-const allowedOrigins = ["https://ben-mern-chat-frontend.vercel.app", "http://localhost:5173"];
+const PORT = process.env.PORT || 5000;
+const allowedOrigins = [
+    "https://ben-mern-chat-frontend.vercel.app",
+    "http://localhost:5173"
+];
 
 const corsOptions = {
     origin: (origin, callback) => {
@@ -25,9 +28,10 @@ const corsOptions = {
     credentials: true,
 };
 
-
+// **Apply CORS Middleware**
 app.use(cors(corsOptions));
 
+// **Global CORS Headers**
 app.use((req, res, next) => {
     const origin = req.headers.origin;
     if (allowedOrigins.includes(origin)) {
@@ -42,19 +46,21 @@ app.use((req, res, next) => {
     next();
 });
 
-
-app.use(express.json())
+// **Middlewares**
+app.use(express.json());
 app.use(cookieParser());
 connectDB();
 
-app.use("/api/auth", authRoutes)
-app.use("/api/message", messageRoutes)
+// **Routes**
+app.use("/api/auth", authRoutes);
+app.use("/api/message", messageRoutes);
 
-app.get('/', (req, res) => (
-    res.send("Api working")
-))
+// **Test Route**
+app.get('/', (req, res) => {
+    res.send("API is working");
+});
 
+// **Start Server**
 server.listen(PORT, () => {
-    console.log("server is running on port:" + PORT)
-})
-
+    console.log(`Server is running on port: ${PORT}`);
+});
