@@ -12,7 +12,6 @@ const MessageInput = () => {
 
 
     const handleImageChange = (e) => {
-
         const file = e.target.files[0];
 
         if (!file.type.startsWith("image/")) {
@@ -35,7 +34,6 @@ const MessageInput = () => {
 
         formdata.append('image', imagePreview)
         formdata.append('text', text)
-        console.log(text.trim())
 
         try {
             await sendMessages(formdata)
@@ -65,7 +63,6 @@ const MessageInput = () => {
                 )
             }
 
-
             <form onSubmit={handleSendMessage} className='flex items-center gap-2'>
                 <div className='flex-1 flex gap-2'>
                     <input type='text' className='w-full input input-bordered rounded-lg input-sm sm:input-md ' placeholder='Type a message....' value={text} onChange={(e) => setText(e.target.value)} />
@@ -79,14 +76,7 @@ const MessageInput = () => {
                 <button type="submit" className="btn btn-sm btn-circle" disabled={!text.trim() && !imagePreview}>
                     <Send size={22} />
                 </button>
-
-
-
-
-
-
             </form>
-
         </div>
     )
 }
