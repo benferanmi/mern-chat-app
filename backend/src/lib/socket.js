@@ -6,9 +6,12 @@ import express from "express"
 const app = express();
 const server = http.createServer(app)
 
+
 const io = new Server(server, {
     cors: {
-        origin: ["http://localhost:5173", "https://ben-mern-chat-frontend.vercel.app/"]
+        origin: ["http://localhost:5173", "https://ben-mern-chat-frontend.vercel.app/"],
+        method: ['GET', 'POST'],
+        credentials: true,
     }
 });
 export function getReceiverSocketId(userId) {
