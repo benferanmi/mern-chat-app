@@ -22,6 +22,8 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use(cookieParser());
+connectDB();
+
 
 // Routes
 app.use("/api/auth", authRoutes);
@@ -32,5 +34,4 @@ app.get('/', (req, res) => res.send("API working"));
 // Start server
 server.listen(PORT, () => {
     console.log(`Server is running on port: ${PORT}`);
-    connectDB();
 });
