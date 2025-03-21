@@ -4,9 +4,6 @@ import toast from "react-hot-toast";
 import { io } from "socket.io-client"
 
 const BASE_URL = import.meta.env.VITE_BASE_URL
-console.log(BASE_URL)
-
-
 
 export const useAuthStore = create((set, get) => ({
     authUser: null,
@@ -96,9 +93,7 @@ export const useAuthStore = create((set, get) => ({
     },
 
     connectSocket: async () => {
-        console.log("connectsocket function")
         const { authUser } = get()
-        console.log(authUser._id)
         if (!authUser) console.log("not logged in")
         if (!authUser || get().socket?.connected) return;
         if (authUser) {

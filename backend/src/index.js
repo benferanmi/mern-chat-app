@@ -10,17 +10,36 @@ import { app, server } from './lib/socket.js'
 dotenv.config()
 
 const PORT = process.env.PORT
+const allowedOrigins = ["https://ben-mern-chat-frontend.vercel.app", "http://localhost:5173"];
 
 const corsOptions = {
-    origin: ["https://ben-mern-chat-frontend.vercel.app", "http://localhost:5173"], 
-    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-    credentials: true, // Allow cookies/auth headers if needed
-  };
+    origin: ["https://ben-mern-chat-frontend.vercel.app", "http://localhost:5173"],
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'jwt'],
+    credentials: true,
+};
+
+
+app.use(cors(corsOptions));
+
+// Manually Handle Preflight Requests this is for when i am using vercel
+app.use((req, res, next) => {
+    const origin = req.headers.origin;
+    if (allowedOrigins.includes(origin)) {
+        res.header("Access-Control-Allow-Origin", origin);
+    }
+    res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, jwt");
+    res.header("Access-Control-Allow-Credentials", "true");
+    if (req.method === "OPTIONS") {
+        return res.sendStatus(200);
+    }
+    next();
+});
 
 
 app.use(express.json())
 app.use(cookieParser());
-app.use(cors(corsOptions))
 
 app.use("/api/auth", authRoutes)
 app.use("/api/message", messageRoutes)
