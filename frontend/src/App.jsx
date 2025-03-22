@@ -17,7 +17,7 @@ const App = () => {
   const { theme } = useThemeStore()
 
   const testLive = async () => {
-    const res = await axios.get(import.meta.env.VITE_BASE_URL, {})
+    const res = await axios.get(`${import.meta.env.VITE_BASE_URL}/apitest`, {})
     console.log(res)
   }
 

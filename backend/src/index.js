@@ -27,7 +27,9 @@ connectDB();
 app.use("/api/auth", authRoutes);
 app.use("/api/message", messageRoutes);
 
-app.get('/', (req, res) => res.send("API working"));
+//this is for testing the api if it is working from the client 
+app.get('/apitest', (req, res) => res.send("API working"));
+
 if (process.env.NODE_ENV === "production") {
     app.use(express.static(path.join(__dirname, "../frontend/dist")));
 
