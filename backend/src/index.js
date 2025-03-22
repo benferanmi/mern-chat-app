@@ -13,13 +13,16 @@ const PORT = process.env.PORT || 5000; // Default port if not in env
 
 // CORS Configuration
 const corsOptions = {
-    origin: ["https://ben-mern-chat-frontend.vercel.app", "http://localhost:5173"], 
+    origin: "https://ben-mern-chat-frontend.vercel.app",
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
     credentials: true, // Allow cookies/auth headers
+    allowedHeaders: ["Content-Type"],
 };
 
 // Middleware
 app.use(cors(corsOptions));
+
+
 app.use(express.json());
 app.use(cookieParser());
 connectDB();
