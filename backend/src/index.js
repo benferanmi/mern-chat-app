@@ -12,20 +12,35 @@ dotenv.config();
 const PORT = process.env.PORT || 5000; // Default port if not in env
 
 // CORS Configuration
-const corsOptions = {
-    origin: "https://ben-mern-chat-frontend.vercel.app",
-    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-    credentials: true, // Allow cookies/auth headers
-    allowedHeaders: ["Content-Type"],
-};
+// const corsOptions = {
+//     origin: "https://ben-mern-chat-frontend.vercel.app",
+//     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+//     credentials: true, // Allow cookies/auth headers
+//     allowedHeaders: ["Content-Type"],
+// };
 
 // Middleware
-app.use(cors(corsOptions));
+// app.use(cors(corsOptions));
 
 
 app.use(express.json());
 app.use(cookieParser());
 connectDB();
+
+app.use((req, res, next) => {
+    res.header("Access-Control-Allow-Origin", "https://ben-mern-chat-frontend.vercel.app");
+    res.header("Access-Control-Allow-Methods", "GET,HEAD,PUT,PATCH,POST,DELETE");
+    res.header("Access-Control-Allow-Headers", "Content-Type");
+    res.header("Access-Control-Allow-Credentials", "true");
+
+    // Handle preflight (OPTIONS request)
+    if (req.method === "OPTIONS") {
+        return res.sendStatus(204);
+    }
+
+    next();
+});
+
 
 
 // Routes
