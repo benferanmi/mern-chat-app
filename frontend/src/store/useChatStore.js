@@ -10,10 +10,15 @@ export const useChatStore = create((set, get) => ({
     selectedUser: null,
     isUsersLoading: false,
     isMessagesLoading: false,
-
+    isTyping: false,
+    displayTypingMessage: false,
+    displayTypingForId: null,
+    setTyping: (typing) => set({ isTyping: typing }),
 
     getUsers: async () => {
+
         set({ isUsersLoading: true });
+
         try {
             const res = await axiosInstance.get("/message/users");
             set({ users: res.data });
@@ -56,7 +61,6 @@ export const useChatStore = create((set, get) => ({
         const { selectedUser } = get()
         if (!selectedUser) return;
 
-
         const socket = useAuthStore.getState().socket;
 
         socket.on("newMessage", (newMessage) => {
@@ -64,6 +68,17 @@ export const useChatStore = create((set, get) => ({
             const isMessageSendFromSelectedUser = newMessage.senderId === selectedUser._id
             if (!isMessageSendFromSelectedUser) return;
             set({ messages: [...get().messages, newMessage] })
+            const messageId = newMessage._id
+            socket.emit("messageSeen", { messageId })
+        })
+
+    },
+
+    checkIfMessageIsUpdated: async () => {
+        const socket = useAuthStore.getState().socket;
+
+        socket.on("messageUpdated", async (updatedMessage) => {
+            set({ messages: [...get().messages.map((message) => message._id === updatedMessage._id ? updatedMessage : message)] })
         })
     },
 
@@ -71,6 +86,49 @@ export const useChatStore = create((set, get) => ({
     unsubscribeFromMessages: () => {
         const socket = useAuthStore.getState().socket;
         socket.off("newMessage")
+    },
+
+    isUserTypingMessage: () => {
+        const { isTyping, selectedUser } = get()
+        const socket = useAuthStore.getState().socket;
+        const receiverId = selectedUser._id
+        const senderId = useAuthStore.getState().authUser._id
+
+        if (isTyping) {
+            socket.emit("typing", { receiverId, senderId })
+        }
+    },
+
+    isUserStoppedTyping: () => {
+        const { isTyping, selectedUser } = get()
+        const socket = useAuthStore.getState().socket;
+        const senderId = useAuthStore.getState().authUser._id
+
+        const receiverId = selectedUser._id
+        if (!isTyping) {
+            socket.emit("stopTyping", { receiverId, senderId })
+            // console.log("user is not typing")
+        }
+    },
+
+    displayUserTypingMessage: () => {
+        const socket = useAuthStore.getState().socket;
+
+        socket.on("userTyping", ({senderId}) => {
+            set({ displayTypingMessage: true });
+            set({ displayTypingForId: senderId })
+
+        })
+
+    },
+
+    displayUserStoppedTyping: () => {
+        const socket = useAuthStore.getState().socket;
+
+        socket.on("userStoppedTyping", () => {
+            set({ displayTypingMessage: false });
+            set({ displayTypingForId: "" })
+        })
     },
 
     // todo:optimize this one later

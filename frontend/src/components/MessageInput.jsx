@@ -8,7 +8,8 @@ const MessageInput = () => {
     const [text, setText] = useState("");
     const [imagePreview, setImagePreview] = useState(false);
     const fileInputRef = useRef(null);
-    const { sendMessages } = useChatStore()
+    const { sendMessages, isUserTypingMessage, isUserStoppedTyping, setTyping, isTyping, } = useChatStore()
+    let typingTimeout;
 
 
     const handleImageChange = (e) => {
@@ -26,6 +27,26 @@ const MessageInput = () => {
         setImagePreview(false)
         if (fileInputRef.current) fileInputRef.current.value = ""
     }
+
+
+    //Todo: Adjust the user is typing feature so that the behaviour of the user is typing will be smooth when a messaging user is typing. 
+    const handleTextChange = async (e) => {
+        setText(e.target.value);
+
+        if (!isTyping) {
+            setTyping(true)
+            isUserTypingMessage()
+        }
+
+        clearTimeout(typingTimeout)
+
+        typingTimeout = setTimeout(() => {
+            setTyping(false)
+            isUserStoppedTyping()
+        }, 5000)
+
+    }
+
 
     const handleSendMessage = async (e) => {
         e.preventDefault();
@@ -65,7 +86,7 @@ const MessageInput = () => {
 
             <form onSubmit={handleSendMessage} className='flex items-center gap-2'>
                 <div className='flex-1 flex gap-2'>
-                    <input type='text' className='w-full input input-bordered rounded-lg input-sm sm:input-md ' placeholder='Type a message....' value={text} onChange={(e) => setText(e.target.value)} />
+                    <input type='text' className='w-full input input-bordered rounded-lg input-sm sm:input-md ' placeholder='Type a message....' value={text} onChange={handleTextChange} />
 
                     <input type="file" accept="/image/*" className="hidden" ref={fileInputRef} onChange={handleImageChange} />
                     <button type="button" className={`hidden sm:flex btn btn-circle ${imagePreview ? "text-emerald-500" : "text-zinc-400"} `} onClick={() => fileInputRef.current?.click()} >

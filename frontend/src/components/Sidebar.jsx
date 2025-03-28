@@ -48,9 +48,9 @@ const Sidebar = () => {
                             <div className="relative mx-auto lg:mx-0">
                                 <img alt={user.name} className="size-12 object-cover rounded-full" src={user.profilePic || "/avater.png"} />
 
-                                {onlineUsers.includes(user._id) && (
+                                {onlineUsers.includes(user._id) ? 
                                     <span className="absolute bottom-0 right-0 size-3 bg-green-500 rounded-full ring-2 ring-zinc-900" />
-                                )}
+                                 :  <span className="absolute bottom-0 right-0 size-3 bg-gray-500 rounded-full ring-2 ring-zinc-900" />}
                             </div>
 
                             {/* user information only visible on larger screen */}

@@ -23,7 +23,7 @@ const App = () => {
 
   useEffect(() => {
     checkAuth()
-    testLive()
+    // testLive()
   }, [checkAuth, onlineUsers])
 
 

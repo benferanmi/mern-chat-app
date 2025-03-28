@@ -1,11 +1,11 @@
-import React from 'react'
 import { useChatStore } from '../store/useChatStore'
 import { useAuthStore } from '../store/useAuthStore'
 import { X } from 'lucide-react'
 
 const ChatHeader = () => {
-    const { selectedUser, setSelectedUser } = useChatStore()
+    const { selectedUser, setSelectedUser, displayTypingMessage, displayTypingForId } = useChatStore()
     const { onlineUsers } = useAuthStore()
+
 
     return (
         <div className='p-2.5 border-b border-base-300'>
@@ -22,8 +22,11 @@ const ChatHeader = () => {
                     {/* User Info */}
                     <div>
                         <h3 className='font-medium'>{selectedUser.fullName}</h3>
-                        <p className='text-sm text-base-content/70'>
+                        <p className='text-sm text-base-content/70 flex flex-row gap-1'>
                             {onlineUsers.includes(selectedUser._id) ? "Online" : "Offline"}
+                            {selectedUser?._id === displayTypingForId && displayTypingMessage && (
+                                <span>- User is Typing ..............</span>
+                            )}
                         </p>
                     </div>
                 </div>

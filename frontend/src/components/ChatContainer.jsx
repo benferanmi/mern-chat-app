@@ -5,21 +5,28 @@ import ChatHeader from "./ChatHeader.jsx"
 import MessageSkeleton from "./skeleton/MessageSkeleton.jsx"
 import { useAuthStore } from "../store/useAuthStore.js"
 import { formatMessageTime } from "../lib/utils.js"
+import { Check, CheckCheck } from "lucide-react"
 
 const ChatContainer = () => {
-  const { messages, getMessages, isMessagesLoading, selectedUser, subscribeToMessages, unsubscribeFromMessages } = useChatStore()
+
+  const { messages, getMessages, isMessagesLoading, selectedUser, subscribeToMessages, unsubscribeFromMessages, displayUserTypingMessage, displayUserStoppedTyping, checkIfMessageIsUpdated } = useChatStore()
   const { authUser } = useAuthStore()
   const messageEndRef = useRef()
-
 
 
   useEffect(() => {
     getMessages(selectedUser._id);
 
     subscribeToMessages();
+    displayUserTypingMessage();
+    checkIfMessageIsUpdated()
 
-    return () => unsubscribeFromMessages();
-  }, [selectedUser._id, getMessages, subscribeToMessages, unsubscribeFromMessages]);
+    return () => {
+      unsubscribeFromMessages();
+      displayUserStoppedTyping()
+    };
+
+  }, [selectedUser._id, subscribeToMessages, unsubscribeFromMessages, displayUserTypingMessage, getMessages, displayUserStoppedTyping, checkIfMessageIsUpdated]);
 
 
   useEffect(() => {
@@ -28,6 +35,12 @@ const ChatContainer = () => {
       messageEndRef.current.scrollIntoView({ behavior: "smooth" })
     }
   }, [messages])
+
+  const messageStatusIcons = {
+    sent: <Check className="rounded-full size-5 text-gray-400 bg-black p-1" />,
+    delivered: <CheckCheck className="rounded-full text-gray-400 size-5 bg-black p-1" />,
+    seen: <CheckCheck className="rounded-full size-5 p-1 bg-black text-green-500" />,
+  };
 
   if (isMessagesLoading) return (
     <div className="flex-1 flex flex-col overflow-auto">
@@ -39,7 +52,7 @@ const ChatContainer = () => {
 
 
   return (
-    <div className="flex-1 flex flex-col overflow-auto overflow-y-scroll h-[100vh]">
+    <div className="flex-1 flex flex-col overflow-auto overflow-y-scroll h-[100%]">
       <ChatHeader />
 
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
@@ -58,12 +71,19 @@ const ChatContainer = () => {
               </time>
             </div>
 
-            <div className="chat-bubble flex flex-col">
+            <div className="chat-bubble flex flex-col relative">
               {message.image && (
                 <img src={message.image} alt="message image" className="sm:max-w-[200px] rounded-md mb-2" />
               )}
 
-              {message.text && <p>{message.text}</p>}
+              {message.text && <div>
+                <p>{message.text}</p>
+                {message.senderId === authUser._id && message.read in messageStatusIcons && (
+                  <span className="absolute bottom-[-5px] left-[-5px]">
+                    {messageStatusIcons[message.read]}
+                  </span>
+                )}
+              </div>}
             </div>
 
           </div>

@@ -16,10 +16,14 @@ const getUsersForSideBar = async (req, res) => {
     }
 }
 
+
+
 const getMessages = async (req, res) => {
     try {
         const { id: userToChatId } = req.params
         const myId = req.user._id
+
+        await Message.updateMany({}, { read: "seen" })
 
         const messages = await Message.find({
             $or: [
@@ -62,7 +66,14 @@ const sendMessage = async (req, res) => {
         const receiverSocketId = getReceiverSocketId(receiverId);
 
         if (receiverSocketId) {
-            io.to(receiverSocketId).emit("newMessage", newMessage)
+            try {
+                const updatedMessage = await Message.findByIdAndUpdate(newMessage._id, { read: "delivered" }, { new: true })
+                io.to(receiverSocketId).emit("newMessage", updatedMessage)
+
+            } catch (error) {
+                console.log(error)
+            }
+
         }
 
         res.status(201).json(newMessage)
@@ -76,7 +87,7 @@ const sendMessage = async (req, res) => {
 const deleteallMessage = async () => {
     const ress = await Message.deleteMany({})
     if (ress) {
-        console.log("deletedt")
+        console.log("deleted all messages")
     }
 }
 
