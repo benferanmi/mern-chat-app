@@ -31,8 +31,14 @@ const getMessages = async (req, res) => {
                 { senderId: userToChatId, receiverId: myId }
             ]
         })
+        const updatedMessage = messages
+        const receiverSocketId = getReceiverSocketId(userToChatId);
+        console.log(receiverSocketId)
+
 
         res.status(200).json(messages)
+        io.to(receiverSocketId).emit("messageUpdated", { updatedMessage, status: "multipleUpdate" })
+
     } catch (error) {
         console.log("Error in getMEssages Controller", error.message);
         res.status(500).json({ message: "Internal Server Error" })

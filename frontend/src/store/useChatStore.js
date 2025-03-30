@@ -77,8 +77,14 @@ export const useChatStore = create((set, get) => ({
     checkIfMessageIsUpdated: async () => {
         const socket = useAuthStore.getState().socket;
 
-        socket.on("messageUpdated", async (updatedMessage) => {
-            set({ messages: [...get().messages.map((message) => message._id === updatedMessage._id ? updatedMessage : message)] })
+        socket.on("messageUpdated", async (data) => {
+            const { updatedMessage, status } = data;
+            if (status === "singleUpdate") {
+                set({ messages: [...get().messages.map((message) => message._id === updatedMessage._id ? updatedMessage : message)] })
+            }
+            if (status === "multipleUpdate") {
+                set({ messages: updatedMessage })
+            }
         })
     },
 
@@ -114,7 +120,7 @@ export const useChatStore = create((set, get) => ({
     displayUserTypingMessage: () => {
         const socket = useAuthStore.getState().socket;
 
-        socket.on("userTyping", ({senderId}) => {
+        socket.on("userTyping", ({ senderId }) => {
             set({ displayTypingMessage: true });
             set({ displayTypingForId: senderId })
 
@@ -134,3 +140,6 @@ export const useChatStore = create((set, get) => ({
     // todo:optimize this one later
     setSelectedUser: (selectedUser) => set({ selectedUser })
 }))
+
+
+//i want to update 1. the status of the message is the message is sent by the user but the user have not seen it, the moment the other user see it the message read status should update.    2. the user is typing is not clearing on mobile view need to refractor that too. thanks

@@ -42,7 +42,7 @@ io.on("connection", (socket) => {
 
         const senderId = updatedMessage.senderId.toString()
 
-        socket.to(getReceiverSocketId(senderId)).emit("messageUpdated", updatedMessage)
+        socket.to(getReceiverSocketId(senderId)).emit("messageUpdated", {updatedMessage, status:"singleUpdate"})
     })
 
     socket.on("disconnect", () => {

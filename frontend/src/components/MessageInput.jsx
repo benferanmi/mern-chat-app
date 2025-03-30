@@ -29,7 +29,6 @@ const MessageInput = () => {
     }
 
 
-    //Todo: Adjust the user is typing feature so that the behaviour of the user is typing will be smooth when a messaging user is typing. 
     const handleTextChange = async (e) => {
         setText(e.target.value);
 
@@ -43,7 +42,7 @@ const MessageInput = () => {
         typingTimeout = setTimeout(() => {
             setTyping(false)
             isUserStoppedTyping()
-        }, 5000)
+        }, 3000)
 
     }
 
