@@ -13,7 +13,7 @@ const io = new Server(server, {
     }
 });
 export function getReceiverSocketId(userId) {
-    return userSocketMap[userId]
+    return userSocketMap[userId] || null
 }
 // used to store online users
 const userSocketMap = {}
@@ -28,7 +28,6 @@ io.on("connection", (socket) => {
     //io.emit() is used to send events to all the connected clients
     io.emit("getOnlineUsers", Object.keys(userSocketMap))
 
-    //typing status
     socket.on("typing", ({ receiverId, senderId }) => {
         socket.to(getReceiverSocketId(receiverId)).emit("userTyping", { receiverId, senderId });
     });
@@ -38,11 +37,11 @@ io.on("connection", (socket) => {
     });
 
     socket.on("messageSeen", async ({ messageId }) => {
-        const updatedMessage = await Message.findByIdAndUpdate(messageId, { read: "seen" }, { new: true });
+        const updatedMessage = await Message.findByIdAndUpdate(messageId, { status: "seen" }, { new: true });
 
         const senderId = updatedMessage.senderId.toString()
 
-        socket.to(getReceiverSocketId(senderId)).emit("messageUpdated", {updatedMessage, status:"singleUpdate"})
+        socket.to(getReceiverSocketId(senderId)).emit("messageUpdated", { updatedMessage, status: "singleUpdate" })
     })
 
     socket.on("disconnect", () => {

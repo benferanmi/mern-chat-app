@@ -3,7 +3,7 @@ import { useChatStore } from '../store/useChatStore';
 import { X, Send, Image } from 'lucide-react';
 import toast from 'react-hot-toast';
 
-const MessageInput = () => {
+const MessageInput = ({ replyTo }) => {
 
     const [text, setText] = useState("");
     const [imagePreview, setImagePreview] = useState(false);
@@ -54,6 +54,9 @@ const MessageInput = () => {
 
         formdata.append('image', imagePreview)
         formdata.append('text', text)
+        replyTo ? formdata.append('replyTo', replyTo) : ""
+
+        console.log(replyTo)
 
         try {
             await sendMessages(formdata)

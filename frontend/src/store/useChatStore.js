@@ -46,6 +46,16 @@ export const useChatStore = create((set, get) => ({
 
     },
 
+    deleteMessage: async (messageId) => {
+        try {
+            const res = await axiosInstance.post("/message/delete", { messageId })
+            console.log(res)
+            set({ messages: [...get().messages.filter((message) => message._id !== res.data._id)] })
+        } catch (error) {
+            console.log(error)
+        }
+    },
+
     sendMessages: async (formdata) => {
         const { selectedUser, messages } = get()
 
@@ -142,4 +152,4 @@ export const useChatStore = create((set, get) => ({
 }))
 
 
-//i want to update 1. the status of the message is the message is sent by the user but the user have not seen it, the moment the other user see it the message read status should update.    2. the user is typing is not clearing on mobile view need to refractor that too. thanks
+//the user that us not online, the message is being updated to seen i need to fix that too

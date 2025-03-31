@@ -16,14 +16,12 @@ const getUsersForSideBar = async (req, res) => {
     }
 }
 
-
-
 const getMessages = async (req, res) => {
     try {
         const { id: userToChatId } = req.params
         const myId = req.user._id
 
-        await Message.updateMany({}, { read: "seen" })
+        await Message.updateMany({}, { status: "seen" })
 
         const messages = await Message.find({
             $or: [
@@ -33,8 +31,6 @@ const getMessages = async (req, res) => {
         })
         const updatedMessage = messages
         const receiverSocketId = getReceiverSocketId(userToChatId);
-        console.log(receiverSocketId)
-
 
         res.status(200).json(messages)
         io.to(receiverSocketId).emit("messageUpdated", { updatedMessage, status: "multipleUpdate" })
@@ -48,9 +44,12 @@ const getMessages = async (req, res) => {
 const sendMessage = async (req, res) => {
     try {
         const text = req.body.text
+        const replyTo = req.body.replyTo
         const image = req.file
         const { id: receiverId } = req.params
         const senderId = req.user._id
+
+        console.log("this is replyTo from the client", replyTo)
 
         let imageUrl;
         if (image) {
@@ -63,6 +62,7 @@ const sendMessage = async (req, res) => {
             senderId,
             receiverId,
             text,
+            replyTo,
             image: imageUrl
         })
 
@@ -73,7 +73,7 @@ const sendMessage = async (req, res) => {
 
         if (receiverSocketId) {
             try {
-                const updatedMessage = await Message.findByIdAndUpdate(newMessage._id, { read: "delivered" }, { new: true })
+                const updatedMessage = await Message.findByIdAndUpdate(newMessage._id, { status: "delivered" }, { new: true })
                 io.to(receiverSocketId).emit("newMessage", updatedMessage)
 
             } catch (error) {
@@ -90,6 +90,20 @@ const sendMessage = async (req, res) => {
     }
 }
 
+const deleteMessage = async (req, res) => {
+    const { messageId } = req.body
+    console.log("delete message called", messageId)
+    try {
+        const response = await Message.findByIdAndDelete(messageId, {})
+
+        res.status(200).json(response)
+
+    } catch (error) {
+        console.log(error, 'there is an error in the deleteMessage controller')
+        res.status(500).json(error.message)
+    }
+}
+
 const deleteallMessage = async () => {
     const ress = await Message.deleteMany({})
     if (ress) {
@@ -97,5 +111,7 @@ const deleteallMessage = async () => {
     }
 }
 
+// deleteallMessage()
 
-export { getUsersForSideBar, getMessages, sendMessage }
+
+export { getUsersForSideBar, getMessages, sendMessage, deleteMessage }

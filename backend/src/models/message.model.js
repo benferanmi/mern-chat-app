@@ -6,10 +6,11 @@ const messageSchema = new mongoose.Schema({
     receiverId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
     text: { type: String },
     image: { type: String },
-    read: {
+    status: {
         type: String, enum: ['sent', 'delivered', 'seen'],
         default: "sent"
-    }
+    },
+    replyTo: { type: mongoose.Schema.Types.ObjectId, ref: "Message", default: null },
 },
     { timestamps: true }
 )
